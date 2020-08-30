@@ -4,6 +4,7 @@ from .pages.basket_page import BasketPage
 import pytest
 
 
+@pytest.mark.need_review
 @pytest.mark.parametrize('link', ["http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer1",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer2",
@@ -15,7 +16,6 @@ import pytest
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer8",
                                   "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer9"])
 def test_guest_can_add_product_to_basket(browser, link):
-    # link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=newYear2019"
     page = ProductPage(browser, link)
     page.open()
     page.add_product_to_basket()
@@ -57,6 +57,7 @@ def test_guest_should_see_login_link_on_product_page(browser):
     page.should_be_login_link()
 
 
+@pytest.mark.need_review
 @pytest.mark.xfail
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/coders-at-work_207/"
@@ -67,6 +68,7 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
     login_page.should_be_login_page()
 
 
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/coders-at-work_207/"
     page = ProductPage(browser, link)
@@ -77,7 +79,7 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket_page.verify_empty_basket_message()
 
 
-@pytest.mark.bk
+@pytest.mark.authorised_user
 class TestUserAddToBasketFromProductPage():
     @pytest.fixture(scope="function", autouse=True)
     def setup(self, browser):
@@ -87,8 +89,9 @@ class TestUserAddToBasketFromProductPage():
         page.register_new_user(page.get_random_email(), page.get_random_password(10))
         page.should_be_authorized_user()
 
+    @pytest.mark.need_review
     def test_user_can_add_product_to_basket(self, browser):
-        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
+        link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207/?promo=offer0"
         page = ProductPage(browser, link)
         page.open()
         page.add_product_to_basket()
